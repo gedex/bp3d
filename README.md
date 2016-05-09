@@ -28,7 +28,7 @@ if err := p.Pack(); err != nil {
 	log.Fatal(err)
 }
 
-// Each p.Bins, b, might have packed items in b.Items
+// Each bin, b, in p.Bins might have packed items in b.Items
 ```
 
 See [`example/example.go`](./example/example.go)
