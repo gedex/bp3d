@@ -7,7 +7,7 @@ modified to allow flexible bins and use `float64` instead of `int`.
 ## Install
 
 ```
-go get github.com/Automattic/bp3d
+go get github.com/gedex/bp3d
 ```
 
 ## Usage
