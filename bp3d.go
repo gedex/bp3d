@@ -21,7 +21,7 @@ type BinSlice []*Bin
 
 func (bs BinSlice) Len() int { return len(bs) }
 func (bs BinSlice) Less(i, j int) bool {
-	return bs[i].GetVolume() < bs[j].GetVolume()
+	return bs[i].GetVolume() < bs[j].GetVolume() || bs[i].Name < bs[j].Name
 }
 func (bs BinSlice) Swap(i, j int) {
 	bs[i], bs[j] = bs[j], bs[i]
@@ -71,6 +71,16 @@ func (b *Bin) GetMaxWeight() float64 {
 
 // PutItem tries to put item into pivot p of bin b.
 func (b *Bin) PutItem(item *Item, p Pivot) (fit bool) {
+	//Check weight first
+	var totalWeight float64
+	for _, ib := range b.Items {
+		totalWeight += ib.Weight
+	}
+	if totalWeight+item.Weight > b.MaxWeight {
+		fit = false
+		return
+	}
+
 	item.Position = p
 	for i := 0; i < 6; i++ {
 		item.RotationType = RotationType(i)
@@ -158,7 +168,7 @@ type ItemSlice []*Item
 
 func (is ItemSlice) Len() int { return len(is) }
 func (is ItemSlice) Less(i, j int) bool {
-	return is[i].GetVolume() > is[j].GetVolume()
+	return is[i].GetVolume() > is[j].GetVolume() || is[i].Name < is[j].Name
 }
 func (is ItemSlice) Swap(i, j int) {
 	is[i], is[j] = is[j], is[i]
