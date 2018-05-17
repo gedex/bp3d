@@ -21,7 +21,7 @@ type BinSlice []*Bin
 
 func (bs BinSlice) Len() int { return len(bs) }
 func (bs BinSlice) Less(i, j int) bool {
-	return bs[i].GetVolume() < bs[j].GetVolume()
+	return bs[i].GetVolume() < bs[j].GetVolume() || bs[i].Name < bs[j].Name
 }
 func (bs BinSlice) Swap(i, j int) {
 	bs[i], bs[j] = bs[j], bs[i]
@@ -168,7 +168,7 @@ type ItemSlice []*Item
 
 func (is ItemSlice) Len() int { return len(is) }
 func (is ItemSlice) Less(i, j int) bool {
-	return is[i].GetVolume() > is[j].GetVolume()
+	return is[i].GetVolume() > is[j].GetVolume() || is[i].Name < is[j].Name
 }
 func (is ItemSlice) Swap(i, j int) {
 	is[i], is[j] = is[j], is[i]
