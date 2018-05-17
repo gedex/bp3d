@@ -71,6 +71,16 @@ func (b *Bin) GetMaxWeight() float64 {
 
 // PutItem tries to put item into pivot p of bin b.
 func (b *Bin) PutItem(item *Item, p Pivot) (fit bool) {
+	//Check weight first
+	var totalWeight float64
+	for _, ib := range b.Items {
+		totalWeight += ib.Weight
+	}
+	if totalWeight+item.Weight > b.MaxWeight {
+		fit = false
+		return
+	}
+
 	item.Position = p
 	for i := 0; i < 6; i++ {
 		item.RotationType = RotationType(i)
