@@ -1,6 +1,7 @@
 package bp3d
 
 import (
+	"errors"
 	"fmt"
 	"math"
 	"sort"
@@ -268,12 +269,19 @@ func (p *Packer) AddItem(items ...*Item) {
 	p.Items = append(p.Items, items...)
 }
 
+var (
+	InvalidBinsVolume = errors.New("invalid bins volume")
+)
+
 func (p *Packer) Pack() error {
 	sort.Sort(BinSlice(p.Bins))
 	sort.Sort(ItemSlice(p.Items))
 
-	// TODO(gedex): validate bins volumes. this is the reason we need error
-	// to be returned before iterating items.
+	maxVolumeItem := p.Items[len(p.Items)-1]
+	maxVolumeBin := p.Bins[len(p.Bins)-1]
+	if maxVolumeBin.GetVolume() < maxVolumeItem.GetVolume() {
+		return InvalidBinsVolume
+	}
 
 	for len(p.Items) > 0 {
 		bin := p.FindFittedBin(p.Items[0])
