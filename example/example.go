@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/gedex/bp3d"
+	"github.com/spicescode/bp3d"
 )
 
 func main() {
