@@ -141,7 +141,7 @@ func TestPack(t *testing.T) {
 				unpacked: []*Item{},
 			},
 		},
-		// Unfit error
+		// invalid volume error
 		{
 			bins: []*Bin{
 				NewBin("Bin 1", 220, 160, 100, 110),
@@ -149,6 +149,19 @@ func TestPack(t *testing.T) {
 			items: []*Item{
 				NewItem("Item 1", 230, 160, 110, 10),
 				NewItem("Item 2", 230, 100, 30, 10),
+			},
+			errExpected: true,
+		},
+		// Unfit error
+		{
+			bins: []*Bin{
+				NewBin("Bin 1", 220, 160, 100, 110),
+			},
+			items: []*Item{
+				NewItem("Item 1", 230, 100, 30, 10),
+				NewItem("Item 2", 230, 100, 30, 10),
+				NewItem("Item 3", 230, 100, 30, 10),
+				NewItem("Item 4", 230, 100, 30, 10),
 			},
 			errExpected: true,
 		},

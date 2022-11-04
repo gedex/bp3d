@@ -271,6 +271,7 @@ func (p *Packer) AddItem(items ...*Item) {
 
 var (
 	InvalidBinsVolume = errors.New("invalid bins volume")
+	UnfitItemsExist   = errors.New("unfit items existing")
 )
 
 func (p *Packer) Pack() error {
@@ -291,6 +292,10 @@ func (p *Packer) Pack() error {
 		}
 
 		p.Items = p.packToBin(bin, p.Items)
+	}
+
+	if len(p.UnfitItems) > 0 {
+		return UnfitItemsExist
 	}
 
 	return nil
