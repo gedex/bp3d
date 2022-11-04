@@ -274,8 +274,8 @@ var (
 )
 
 func (p *Packer) Pack() error {
-	sort.Sort(BinSlice(p.Bins))
-	sort.Sort(ItemSlice(p.Items))
+	sort.Sort(BinSlice(p.Bins))   // 昇順
+	sort.Sort(ItemSlice(p.Items)) // 降順
 
 	maxVolumeItem := p.Items[0]
 	maxVolumeBin := p.Bins[len(p.Bins)-1]
