@@ -14,6 +14,7 @@ type result struct {
 type testData struct {
 	bins        []*Bin
 	items       []*Item
+	errExpected bool
 	expectation result
 }
 
@@ -114,13 +115,13 @@ func TestPack(t *testing.T) {
 				NewBin("Bin 1", 220, 160, 100, 110),
 			},
 			items: []*Item{
-				NewItem("Item 1", 20, 100, 30, 10),
+				NewItem("Item 7", 100, 100, 30, 10),
+				NewItem("Item 6", 100, 100, 30, 10),
 				NewItem("Item 2", 100, 20, 30, 10),
 				NewItem("Item 3", 20, 100, 30, 10),
 				NewItem("Item 4", 100, 20, 30, 10),
 				NewItem("Item 5", 100, 20, 30, 10),
-				NewItem("Item 6", 100, 100, 30, 10),
-				NewItem("Item 7", 100, 100, 30, 10),
+				NewItem("Item 1", 20, 100, 30, 10),
 			},
 			expectation: result{
 				packed: []*Bin{
@@ -140,6 +141,17 @@ func TestPack(t *testing.T) {
 				unpacked: []*Item{},
 			},
 		},
+		// Unfit error
+		{
+			bins: []*Bin{
+				NewBin("Bin 1", 220, 160, 100, 110),
+			},
+			items: []*Item{
+				NewItem("Item 1", 230, 160, 110, 10),
+				NewItem("Item 2", 230, 100, 30, 10),
+			},
+			errExpected: true,
+		},
 	}
 
 	for _, tc := range testCases {
@@ -153,6 +165,9 @@ func testPack(t *testing.T, td testData) {
 	packer.AddItem(td.items...)
 
 	if err := packer.Pack(); err != nil {
+		if td.errExpected {
+			return
+		}
 		t.Fatalf("Got error: %v", err)
 	}
 
