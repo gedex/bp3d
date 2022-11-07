@@ -284,6 +284,19 @@ func (p *Packer) Pack() error {
 		return InvalidBinsVolume
 	}
 
+	itemVolumeSum := 0.0
+	binVolumeSum := 0.0
+
+	for _, item := range p.Items {
+		itemVolumeSum += item.GetVolume()
+	}
+	for _, bin := range p.Bins {
+		binVolumeSum += bin.GetVolume()
+	}
+	if binVolumeSum < itemVolumeSum {
+		return InvalidBinsVolume
+	}
+
 	for len(p.Items) > 0 {
 		bin := p.FindFittedBin(p.Items[0])
 		if bin == nil {
