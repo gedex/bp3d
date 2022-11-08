@@ -12,6 +12,7 @@ type result struct {
 }
 
 type testData struct {
+	name        string
 	bins        []*Bin
 	items       []*Item
 	errExpected bool
@@ -24,6 +25,7 @@ func TestPack(t *testing.T) {
 		// Edge case that needs rotation.
 		// from https://github.com/dvdoug/BoxPacker/issues/20
 		{
+			name: "Edge case that needs rotation.",
 			bins: []*Bin{
 				NewBin("Le grande box", 100, 100, 300, 1500),
 			},
@@ -46,6 +48,7 @@ func TestPack(t *testing.T) {
 		// test three items fit into smaller bin.
 		// from https://github.com/dvdoug/BoxPacker/blob/master/tests/PackerTest.php#L12
 		{
+			name: "test three items fit into smaller bin.",
 			bins: []*Bin{
 				NewBin("Le petite box", 296, 296, 8, 1000),
 				NewBin("Le grande box", 2960, 2960, 80, 10000),
@@ -77,6 +80,7 @@ func TestPack(t *testing.T) {
 		// test three items fit into larger bin.
 		// from https://github.com/dvdoug/BoxPacker/blob/master/tests/PackerTest.php#L36
 		{
+			name: "test three items fit into larger bin.",
 			bins: []*Bin{
 				NewBin("Le petite box", 296, 296, 8, 1000),
 				NewBin("Le grande box", 2960, 2960, 80, 10000),
@@ -111,6 +115,7 @@ func TestPack(t *testing.T) {
 		// 1 bin with 7 items fit into.
 		// from https://github.com/bom-d-van/binpacking/blob/master/binpacking_test.go
 		{
+			name: "1 bin with 7 items fit into.",
 			bins: []*Bin{
 				NewBin("Bin 1", 220, 160, 100, 110),
 			},
@@ -143,6 +148,7 @@ func TestPack(t *testing.T) {
 		},
 		// invalid volume error
 		{
+			name: "invalid volume error",
 			bins: []*Bin{
 				NewBin("Bin 1", 220, 160, 100, 110),
 			},
@@ -154,6 +160,7 @@ func TestPack(t *testing.T) {
 		},
 		// Unfit error
 		{
+			name: "Unfit error",
 			bins: []*Bin{
 				NewBin("Bin 1", 220, 160, 100, 110),
 			},
@@ -165,10 +172,37 @@ func TestPack(t *testing.T) {
 			},
 			errExpected: true,
 		},
+		{
+			name: "large unfit",
+			bins: []*Bin{
+				NewBin("120size-0", 53.5, 24.0, 38.5, 20.0),
+				NewBin("120size-1", 53.5, 24.0, 38.5, 20.0),
+				NewBin("120size-2", 53.5, 24.0, 38.5, 20.0),
+				NewBin("60size-0", 26.4, 11.4, 19.4, 5.0),
+			},
+			items: []*Item{
+				NewItem("Item 1", 10.0, 10.0, 10.0, 2.0),
+				NewItem("Item 2", 10.0, 10.0, 10.0, 2.0),
+				NewItem("Item 3", 10.0, 10.0, 10.0, 2.0),
+				NewItem("Item 4", 10.0, 10.0, 10.0, 2.0),
+				NewItem("Item 5", 10.0, 10.0, 10.0, 2.0),
+				NewItem("Item 6", 10.0, 10.0, 10.0, 2.0),
+				NewItem("Item 7", 10.0, 10.0, 10.0, 2.0),
+				NewItem("Item 8", 10.0, 10.0, 10.0, 2.0),
+				NewItem("Item 9", 10.0, 10.0, 10.0, 2.0),
+				NewItem("Item 10", 10.0, 10.0, 10.0, 2.0),
+				NewItem("Item 11", 50.0, 30.0, 10.0, 2.0),
+				NewItem("Item 12", 50.0, 30.0, 10.0, 2.0),
+				NewItem("Item 13", 50.0, 30.0, 10.0, 2.0),
+			},
+			errExpected: true,
+		},
 	}
 
 	for _, tc := range testCases {
-		testPack(t, tc)
+		t.Run(tc.name, func(t *testing.T) {
+			testPack(t, tc)
+		})
 	}
 }
 
