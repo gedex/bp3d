@@ -368,6 +368,7 @@ func (p *Packer) packToBin(b *Bin, items []*Item) (unpacked []*Item) {
 					fitted = true
 					break
 				}
+				b = b2
 			}
 
 			if !fitted {
