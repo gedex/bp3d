@@ -197,9 +197,41 @@ func TestPack(t *testing.T) {
 			},
 			errExpected: true,
 		},
+		{
+			name: "check fits",
+			bins: []*Bin{
+				// NewBin("80サイズ", 33.5, 24.5, 18.5, 10.0),
+				// NewBin("80サイズ", 24.5, 33.5, 18.5, 10.0),
+				NewBin("100サイズ0", 38.0, 27.0, 29.0, 15.0),
+				NewBin("120サイズ0", 46.0, 32.0, 29.5, 20.0),
+				// NewBin("120サイズ1", 46.0, 32.0, 29.5, 20.0),
+			},
+			items: []*Item{
+				NewItem("CR-AL0138-0", 23.0, 25.0, 3.4, 0.8),
+				NewItem("CR-AL0138-1", 23.0, 25.0, 3.4, 0.8),
+				NewItem("CR-AL0085-0", 20.0, 21.0, 4.5, 0.6),
+				NewItem("CR-AL0085-1", 20.0, 21.0, 4.5, 0.6),
+				NewItem("CR-AL0085-2", 20.0, 21.0, 4.5, 0.6),
+				NewItem("CR-AL0085-3", 20.0, 21.0, 4.5, 0.6),
+				NewItem("CR-AL0085-4", 20.0, 21.0, 4.5, 0.6),
+				NewItem("CR-AL0085-5", 20.0, 21.0, 4.5, 0.6),
+				NewItem("CR-AL0099-0", 16.0, 20.0, 2.0, 0.3),
+				NewItem("CR-AL0099-1", 16.0, 20.0, 2.0, 0.3),
+				NewItem("CR-AL0099-2", 16.0, 20.0, 2.0, 0.3),
+				NewItem("CR-AL0105-0", 22.0, 28.0, 2.5, 0.5),
+				NewItem("CR-AL0105-1", 22.0, 28.0, 2.5, 0.5),
+				NewItem("CR-AL0105-2", 22.0, 28.0, 2.5, 0.5),
+				NewItem("CR-AL0105-3", 22.0, 28.0, 2.5, 0.5),
+				NewItem("CR-AL0105-4", 22.0, 28.0, 2.5, 0.5),
+				NewItem("CR-AL0105-5", 22.0, 28.0, 2.5, 0.5),
+			},
+		},
 	}
 
 	for _, tc := range testCases {
+		if tc.name != "check fits" {
+			continue
+		}
 		t.Run(tc.name, func(t *testing.T) {
 			testPack(t, tc)
 		})
@@ -216,6 +248,9 @@ func testPack(t *testing.T, td testData) {
 			return
 		}
 		t.Fatalf("Got error: %v", err)
+	}
+	if td.expectation.packed == nil && td.expectation.unpacked == nil {
+		return
 	}
 
 	if !reflect.DeepEqual(packer.Bins, td.expectation.packed) {

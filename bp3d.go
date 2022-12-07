@@ -240,7 +240,8 @@ func rectIntersect(i1, i2 *Item, x, y Axis) bool {
 	ix := math.Max(cx1, cx2) - math.Min(cx1, cx2)
 	iy := math.Max(cy1, cy2) - math.Min(cy1, cy2)
 
-	return ix < (d1[x]+d2[x])/2 && iy < (d1[y]+d2[y])/2
+	// to avoid floating point errors, use loose criteria
+	return 0.01 < (d1[x]+d2[x])/2-ix && 0.01 < (d1[y]+d2[y])/2-iy
 }
 
 func (i *Item) String() string {
